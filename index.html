@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>What Should I Watch?</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e60a15",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#141414",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 12s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%, 16.66%, 100%': { opacity: 0 },
+                            '8.33%, 25%': { opacity: 1 },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            min-height: 100dvh;
+        }
+        .screen {
+            display: none;
+        }
+        .screen.active {
+            display: flex;
+        }
+        .chip {
+            transition: all 0.2s ease;
+        }
+        .chip.selected {
+            background-color: #e60a15 !important;
+        }
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn.selected {
+            background-color: #e60a15 !important;
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display">
+
+    <!-- Screen 0: Welcome -->
+    <div id="screen-welcome" class="screen active relative h-screen w-full flex-col justify-center items-center p-6 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-background-dark/80 backdrop-blur-sm"></div>
+            <img alt="Movie Poster Background 1" class="absolute inset-0 h-full w-full object-cover opacity-0 animate-fade-in" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrSWlIDQek48v3JHBl2XkBtzsdeKmgzhQFACAvCzvudpNDv1nzLdpZany02bsrNkIrPDQ8roXOHR_EC8gyy8M_RyymjpwPK5yK5ESHLsPOiNaz_Q3oJvbZbczIycYpY9VJZxKlNEuiibjtfzHSdg6t3gv84ql3LKThr3wVG0dShctlz9rz7DO-cGgtCpj5QyBjsP-1KiGsZc55Mw5mbs8rfNOMGWHmvus2M9s-dSaV5nZgRNu36issV6gCwjS6HNHgQt8XOssbivM" style="animation-delay: 0s;"/>
+            <img alt="Movie Poster Background 2" class="absolute inset-0 h-full w-full object-cover opacity-0 animate-fade-in" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgExcBeXF4fpm0brI4HPpXRtagcLPz1SgZrmPSI8BcMnwiPzTsjUIJnNV7jULLxkuxFkL4u2YS01si2Kl_SB69tvFzRqHvapTSTZBoapvSxBYOppddeGnJ5fT-fyxo9ySI2G37cntEBSALGYcEVS4X9iyYUlwgrG7zMjEmb1mDMALllTZ6m2Dw8CktCY6wCsaefjGMX1snW_bwBM5uu25YeO9DFhvxNbN8cCoBIb8lf3OriQBbT04SXM6XKR91OoTdu3io98QZI2Q" style="animation-delay: 4s;"/>
+            <img alt="Movie Poster Background 3" class="absolute inset-0 h-full w-full object-cover opacity-0 animate-fade-in" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcZRXXm78Hl7VAqaUHmlFIuFZPpt8NfsfrRQUXGPKeqFFB_6kkthERA6YFrm2_dGQD2iS9BHkvlx287n0KaIX2kEMMvVv52RknQdms0kwlu-JCT4PUljb5DzdL7yb6HdCN2p2aDQMXF0uHMwc1zpnf5pMAhHxDu0UHJGnr_JOIBrWkIUyqlYkevGHcbj2ZeZK1XceE5rkCdXslCJE0UbDamnUL3tmVuymYX7HzEyetJawlxcvebNmCloGMR1pv17W_ER502uQezkk" style="animation-delay: 8s;"/>
+        </div>
+        <div class="relative z-10 flex flex-col items-center justify-center max-w-md w-full">
+            <div class="mb-6">
+                <span class="material-symbols-outlined text-white/80 text-7xl">play_circle</span>
+            </div>
+            <h1 class="text-white tracking-light text-4xl font-bold leading-tight text-center pb-3">What Should I Watch?</h1>
+            <p class="text-white/80 text-lg font-normal leading-normal pb-8 text-center max-w-xs">Ready to discover your next binge?</p>
+            <div class="flex-grow"></div>
+            <div class="w-full pt-8 pb-4">
+                <button onclick="goToScreen('q1')" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-primary text-white text-lg font-bold leading-normal tracking-[0.015em] shadow-lg shadow-primary/30 hover:opacity-90 active:opacity-80 transition-opacity">
+                    <span class="truncate">Get Started</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 1: How much time? -->
+    <div id="screen-q1" class="screen relative h-screen w-full flex-col text-white overflow-x-hidden">
+        <header class="fixed top-0 left-0 right-0 z-10 bg-background-dark/80 backdrop-blur-sm">
+            <div class="p-4">
+                <div class="rounded bg-[#333333]">
+                    <div class="h-2 rounded bg-primary" style="width: 25%;"></div>
+                </div>
+            </div>
+        </header>
+        <main class="flex flex-1 flex-col justify-center px-4 pt-20 pb-24">
+            <div class="flex flex-col items-center">
+                <h1 class="text-white tracking-light text-[32px] font-bold leading-tight text-center pb-8">How much time do you have right now?</h1>
+                <div id="time-options" class="flex w-full max-w-md flex-col items-stretch gap-3">
+                    <button data-value="quick" class="option-btn flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-16 px-5 bg-[#333333] text-white text-base font-bold leading-normal tracking-[0.015em] w-full text-left sm:text-center">
+                        <span class="flex-1 truncate">Something quick <span class="opacity-80 font-normal">(20-30 mins)</span></span>
+                    </button>
+                    <button data-value="proper" class="option-btn flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-16 px-5 bg-[#333333] text-white text-base font-bold leading-normal tracking-[0.015em] w-full text-left sm:text-center">
+                        <span class="flex-1 truncate">One proper watch <span class="opacity-80 font-normal">(40-120 mins)</span></span>
+                    </button>
+                    <button data-value="binge" class="option-btn flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-16 px-5 bg-[#333333] text-white text-base font-bold leading-normal tracking-[0.015em] w-full text-left sm:text-center">
+                        <span class="flex-1 truncate">Long binge session <span class="opacity-80 font-normal">(2+ hours)</span></span>
+                    </button>
+                </div>
+            </div>
+        </main>
+        <footer class="fixed bottom-0 left-0 right-0 z-10 w-full bg-gradient-to-t from-background-dark to-transparent pt-8">
+            <div class="flex justify-between gap-3 px-4 pb-4">
+                <button onclick="goToScreen('welcome')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-[#333333] text-base font-bold leading-normal tracking-[0.015em] text-white hover:bg-[#444444] transition-colors">
+                    <span class="truncate">Back</span>
+                </button>
+                <button onclick="goToScreen('q2')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary text-base font-bold leading-normal tracking-[0.015em] text-white hover:opacity-90 transition-opacity">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Screen 2: What do you want? -->
+    <div id="screen-q2" class="screen flex-col h-screen max-w-md mx-auto">
+        <div class="px-4 pt-8">
+            <div class="rounded bg-neutral-700/50">
+                <div class="h-1.5 rounded bg-primary" style="width: 50%;"></div>
+            </div>
+        </div>
+        <main class="flex flex-col flex-grow px-4 pt-16">
+            <h1 class="text-3xl font-bold leading-tight text-center text-white">What are you looking for from this movie/show?</h1>
+            <div id="mood-options" class="flex flex-wrap justify-center gap-3 pt-8">
+                <div data-value="laugh" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Make me laugh</p>
+                </div>
+                <div data-value="feel-good" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Make me feel good</p>
+                </div>
+                <div data-value="hooked" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Keep me hooked</p>
+                </div>
+                <div data-value="emotional" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Emotional & dramatic</p>
+                </div>
+                <div data-value="mind-blow" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Blow my mind</p>
+                </div>
+                <div data-value="learn" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Learn something</p>
+                </div>
+                <div data-value="dark" class="chip flex h-10 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#333333] px-4">
+                    <p class="text-sm font-medium leading-normal text-white">Ready for something dark</p>
+                </div>
+            </div>
+        </main>
+        <footer class="w-full pb-8 pt-4">
+            <div class="flex justify-between gap-3 px-4">
+                <button onclick="goToScreen('q1')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-[#333333] text-base font-bold leading-normal tracking-[0.015em] text-white hover:bg-[#444444] transition-colors">
+                    <span class="truncate">Back</span>
+                </button>
+                <button onclick="goToScreen('q3')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary text-base font-bold leading-normal tracking-[0.015em] text-white hover:opacity-90 transition-opacity">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Screen 3: Content Type -->
+    <div id="screen-q3" class="screen relative h-screen min-h-[600px] w-full flex-col">
+        <header class="pt-4 px-4">
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-end">
+                    <p class="text-sm font-normal leading-normal text-white/70">3/4</p>
+                </div>
+                <div class="h-1.5 w-full rounded-full bg-[#4D4D4D]">
+                    <div class="h-1.5 rounded-full bg-primary" style="width: 75%;"></div>
+                </div>
+            </div>
+        </header>
+        <div class="flex-grow flex flex-col justify-center items-center text-center px-4">
+            <h1 class="text-white tracking-light text-[32px] font-bold leading-tight pb-12">What type of content do you want?</h1>
+            <div id="content-options" class="flex w-full max-w-sm flex-col gap-4">
+                <div data-value="movie" class="option-btn flex h-14 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#4D4D4D]">
+                    <p class="text-lg font-medium leading-normal text-white">Movie</p>
+                </div>
+                <div data-value="series" class="option-btn flex h-14 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-[#4D4D4D]">
+                    <p class="text-lg font-medium leading-normal text-white">Series/Sitcoms</p>
+                </div>
+            </div>
+        </div>
+        <footer class="w-full pb-8 pt-4">
+            <div class="flex justify-between gap-3 px-4">
+                <button onclick="goToScreen('q2')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-[#333333] text-base font-bold leading-normal tracking-[0.015em] text-white hover:bg-[#444444] transition-colors">
+                    <span class="truncate">Back</span>
+                </button>
+                <button onclick="goToScreen('era')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary text-base font-bold leading-normal tracking-[0.015em] text-white hover:opacity-90 transition-opacity">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+    <!-- Screen Era: Release Era -->
+    <div id="screen-era" class="screen relative h-screen w-full flex-col">
+        <header class="pt-4 px-4">
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-end">
+                    <p class="text-sm font-normal leading-normal text-white/70">4/5</p>
+                </div>
+                <div class="rounded-full bg-white/10">
+                    <div class="h-2 rounded-full bg-primary" style="width: 80%;"></div>
+                </div>
+            </div>
+        </header>
+        <main class="flex flex-grow flex-col justify-center px-4 pb-24">
+            <h1 class="text-white tracking-tight text-[32px] font-bold leading-tight text-center pb-8">
+                What era are you in the mood for?
+            </h1>
+            <p class="text-white/60 text-center text-sm max-w-md mx-auto pb-4">
+                Pick one or more – we’ll mix them up for you.
+            </p>
+            <div id="era-options" class="flex flex-wrap items-center justify-center gap-3">
+                <div data-value="retro" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">Retro / Old (&lt; 2000)</p>
+                </div>
+                <div data-value="millennial" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">Millennials’ picks (2000–2020)</p>
+                </div>
+                <div data-value="genz" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">Gen Z rizz (&gt; 2020)</p>
+                </div>
+            </div>
+        </main>
+        <footer class="w-full pb-8 pt-4">
+            <div class="flex justify-between gap-3 px-4">
+                <button onclick="goToScreen('q3')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-[#333333] text-base font-bold leading-normal tracking-[0.015em] text-white hover:bg-[#444444] transition-colors">
+                    <span class="truncate">Back</span>
+                </button>
+                <button onclick="goToScreen('q4')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary text-base font-bold leading-normal tracking-[0.015em] text-white hover:opacity-90 transition-opacity">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Screen 4: Language Preference -->
+    <div id="screen-q4" class="screen relative h-screen w-full flex-col">
+        <header class="pt-4 px-4">
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-end">
+                    <p class="text-sm font-normal leading-normal text-white/70">4/4</p>
+                </div>
+                <div class="rounded-full bg-white/10">
+                    <div class="h-2 rounded-full bg-primary" style="width: 100%;"></div>
+                </div>
+            </div>
+        </header>
+        <main class="flex flex-grow flex-col justify-center px-4 pb-24">
+            <h1 class="text-white tracking-tight text-[32px] font-bold leading-tight text-center pb-8">Language preference?</h1>
+            <div id="language-options" class="flex flex-wrap items-center justify-center gap-3">
+                <div data-value="english" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">English</p>
+                </div>
+                <div data-value="hindi" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">Hindi</p>
+                </div>
+                <div data-value="regional" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">Regional</p>
+                </div>
+                <div data-value="any" class="chip flex h-10 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-neutral-700 px-5 py-2">
+                    <p class="text-white text-base font-medium leading-normal">Any</p>
+                </div>
+            </div>
+        </main>
+        <footer class="w-full pb-8 pt-4">
+            <div class="flex justify-between gap-3 px-4">
+                <button onclick="goToScreen('q3')" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-[#333333] text-base font-bold leading-normal tracking-[0.015em] text-white hover:bg-[#444444] transition-colors">
+                    <span class="truncate">Back</span>
+                </button>
+                <button onclick="showRecommendations()" class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary text-base font-bold leading-normal tracking-[0.015em] text-white hover:opacity-90 transition-opacity">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Screen 5: Recommendations -->
+    <div id="screen-recommendations" class="screen relative min-h-screen w-full flex-col font-display text-white">
+        <div class="px-4 pt-4">
+            <div class="rounded bg-white/20">
+                <div class="h-2 rounded bg-primary" style="width: 100%;"></div>
+            </div>
+        </div>
+        <h1 class="text-white tracking-light text-[32px] font-bold leading-tight px-4 text-center pb-3 pt-6">Here are your recommendations</h1>
+        <div id="recommendations-grid" class="grid grid-cols-3 gap-3 p-4">
+            <div class="flex flex-col gap-2">
+                <img class="h-auto w-full rounded-lg object-cover aspect-[2/3] shadow-lg" alt="Stranger Things poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ3KGct3oXvWv3ak2wtSjSSOP89urcsTCQuLSHkoatMomkGswVdIqHU-GdzzELq1RPRQ28meF6QW9ecfaHc8TAYy3EhslLa5H6soHjEFk4gO5bopL_E4BQg1CWOmC89Ht37_Zq1MJ7OkpOENr7-rp-Nm69zAVNGvSKCsIHAe_NxiGv9Lo4IPFE6EdFDmwCmMOEmB1H2HdYdiNl65orpZznsaOQTX7Xaiap89UDdB-gG-Y-vctHSvi61NXyNzgo2EEUz5cTCmqrRoo"/>
+                <div>
+                    <h2 class="font-bold text-white truncate text-sm">Stranger Things</h2>
+                    <p class="text-xs font-medium text-white/60">Series • Netflix</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <img class="h-auto w-full rounded-lg object-cover aspect-[2/3] shadow-lg" alt="The Queen's Gambit poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCVYCklBi7pXG6tkcqTBFKoUQOvhgp153WH-7QJOIaSLTJC7A8NfarKm5vkDmmz35ZMs3HPAM9LOVOZ2f9JV2tcZkI-rR0z_abd9WF6CvPUvg-jy2heB0pWo_PW7UfXpIOc1z25j1Vl73pACcYJxBPnn4p_5zC1gvk4p_ZPH6MMcsaCkgXTFccbWz8oP-Dc2iDSlZT-P8XFfiFxCq5eIx6Xr3-vShu1Fr4yHl080WgPIHtHSKkqZXoyDRec6T0cJ6mRnyMUNpfFEw"/>
+                <div>
+                    <h2 class="font-bold text-white truncate text-sm">The Queen's Gambit</h2>
+                    <p class="text-xs font-medium text-white/60">Series • Netflix</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2">
+                <img class="h-auto w-full rounded-lg object-cover aspect-[2/3] shadow-lg" alt="The Witcher poster" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdin_G2Gnuy22qZCLgoBCTVicA49C1vjS4pybsBCTkXXfAs2I_VHkNQFx74Jet8XqTtDvhoiSwsr_zoT0JsUuOGVO7RBJolMEFtl97wbj9DM7KZyxQnoMjTN2y3BCuLyZmr2nAenTg0npewSQmB-1oRoArcz_6ZaBd09jd8ivXeeuWfsf4eV8MHrj8jkHLv9XeEXtQ2wEaNhUPuPz3FYtPMjpm427kVShY4bGgXYhrmHNdKNEcMqGCo5COk5zc6N60XuI7HKdkaD4"/>
+                <div>
+                    <h2 class="font-bold text-white truncate text-sm">The Witcher</h2>
+                    <p class="text-xs font-medium text-white/60">Series • Netflix</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-auto flex flex-col items-center gap-3 px-4 pb-8 pt-4">
+            <button onclick="refreshRecommendations()" class="flex h-12 w-full min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary text-base font-bold leading-normal tracking-[0.015em] text-white transition-opacity hover:opacity-90 active:opacity-80">
+                <span class="truncate">Give me 3 more suggestions</span>
+            </button>
+            <button onclick="resetApp()" class="flex h-12 w-full min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg border-2 border-white/40 bg-transparent text-base font-bold leading-normal tracking-[0.015em] text-white/80 transition-colors hover:bg-white/10 active:bg-white/20">
+                <span class="truncate">Start Over</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const userSelections = {
+            time: null,
+            moods: [],
+            contentType: null,
+            languages: [],
+            eras: []
+        };
+
+        let currentRecommendations = [];
+        let isLoading = false;
+
+        function goToScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById('screen-' + screenId).classList.add('active');
+        }
+
+        function renderRecommendations(movies) {
+            const grid = document.getElementById('recommendations-grid');
+            
+            if (movies.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-white/60 text-lg">No movies found matching your preferences.</p>
+                        <p class="text-white/40 text-sm mt-2">Try adjusting your filters or start over.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const items = movies.map(movie => {
+                const posterUrl = movie.posterUrl || 'https://via.placeholder.com/200x300?text=No+Poster';
+                const platformText = movie.platform ? ` • ${movie.platform}` : '';
+                const genreText = movie.genre ? movie.genre.split(',')[0].trim() : '';
+                return `
+                    <div class="flex flex-col gap-2">
+                        <img class="h-auto w-full rounded-lg object-cover aspect-[2/3] shadow-lg bg-[#333]" 
+                             alt="${movie.name} poster" 
+                             src="${posterUrl}"
+                             onerror="this.src='https://via.placeholder.com/200x300?text=No+Poster'"/>
+                        <div>
+                            <h2 class="font-bold text-white truncate text-sm">${movie.name}</h2>
+                            <p class="text-xs font-medium text-white/60">${movie.type}${platformText || (genreText ? ` • ${genreText}` : '')}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = items.join('');
+        }
+
+        function showLoadingState() {
+            const grid = document.getElementById('recommendations-grid');
+            grid.innerHTML = `
+                <div class="col-span-3 flex justify-center items-center py-12">
+                    <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+                </div>
+            `;
+        }
+
+        async function fetchRecommendations(excludeIds = []) {
+            const params = new URLSearchParams();
+            
+            if (userSelections.time) {
+                params.append('time', userSelections.time);
+            }
+            if (userSelections.moods.length > 0) {
+                params.append('moods', userSelections.moods.join(','));
+            }
+            if (userSelections.contentType) {
+                params.append('contentType', userSelections.contentType);
+            }
+            if (userSelections.languages.length > 0) {
+                params.append('languages', userSelections.languages.join(','));
+            }
+            if (excludeIds.length > 0) {
+                params.append('exclude', excludeIds.join(','));
+            }
+            if (userSelections.eras && userSelections.eras.length > 0) {
+                params.append('eras', userSelections.eras.join(','));
+            }
+            const response = await fetch(`/api/recommendations?${params.toString()}`);
+            
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to fetch recommendations');
+            }
+            
+            return data.movies || [];
+        }
+
+        async function showRecommendations() {
+            goToScreen('recommendations');
+            showLoadingState();
+            isLoading = true;
+            
+            try {
+                const movies = await fetchRecommendations();
+                currentRecommendations = movies;
+                renderRecommendations(movies);
+            } catch (error) {
+                console.error('Failed to fetch recommendations:', error);
+                const grid = document.getElementById('recommendations-grid');
+                grid.innerHTML = `
+                    <div class="col-span-3 text-center py-8">
+                        <p class="text-white/60 text-lg">Something went wrong. Please try again.</p>
+                    </div>
+                `;
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        async function refreshRecommendations() {
+            if (isLoading) return;
+            
+            const previousRecommendations = [...currentRecommendations];
+            showLoadingState();
+            isLoading = true;
+            
+            try {
+                const currentIds = currentRecommendations.map(m => m.id);
+                const movies = await fetchRecommendations(currentIds);
+                
+                if (movies.length === 0) {
+                    const retryMovies = await fetchRecommendations();
+                    currentRecommendations = retryMovies;
+                    renderRecommendations(retryMovies);
+                } else {
+                    currentRecommendations = movies;
+                    renderRecommendations(movies);
+                }
+            } catch (error) {
+                console.error('Failed to refresh recommendations:', error);
+                if (previousRecommendations.length > 0) {
+                    renderRecommendations(previousRecommendations);
+                    showErrorBanner('Could not load new recommendations. Showing previous results.');
+                } else {
+                    const grid = document.getElementById('recommendations-grid');
+                    grid.innerHTML = `
+                        <div class="col-span-3 text-center py-8">
+                            <p class="text-white/60 text-lg">Something went wrong. Please try again.</p>
+                        </div>
+                    `;
+                }
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function showErrorBanner(message) {
+            let banner = document.getElementById('error-banner');
+            if (!banner) {
+                banner = document.createElement('div');
+                banner.id = 'error-banner';
+                banner.className = 'fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 px-4 z-50 transition-opacity duration-300';
+                document.body.appendChild(banner);
+            }
+            banner.textContent = message;
+            banner.style.opacity = '1';
+            
+            setTimeout(() => {
+                banner.style.opacity = '0';
+                setTimeout(() => {
+                    if (banner.parentNode) {
+                        banner.parentNode.removeChild(banner);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        function resetApp() {
+            userSelections.time = null;
+            userSelections.moods = [];
+            userSelections.contentType = null;
+            userSelections.languages = [];
+            userSelections.eras = [];
+            currentRecommendations = [];
+            
+            document.querySelectorAll('.chip.selected, .option-btn.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            goToScreen('welcome');
+        }
+
+        document.getElementById('time-options').addEventListener('click', function(e) {
+            const btn = e.target.closest('.option-btn');
+            if (btn) {
+                this.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                userSelections.time = btn.dataset.value;
+            }
+        });
+
+        document.getElementById('mood-options').addEventListener('click', function(e) {
+            const chip = e.target.closest('.chip');
+            if (chip) {
+                chip.classList.toggle('selected');
+                const value = chip.dataset.value;
+                if (chip.classList.contains('selected')) {
+                    if (!userSelections.moods.includes(value)) {
+                        userSelections.moods.push(value);
+                    }
+                } else {
+                    userSelections.moods = userSelections.moods.filter(m => m !== value);
+                }
+            }
+        });
+
+        document.getElementById('content-options').addEventListener('click', function(e) {
+            const btn = e.target.closest('.option-btn');
+            if (btn) {
+                this.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                userSelections.contentType = btn.dataset.value;
+            }
+        });
+
+        document.getElementById('language-options').addEventListener('click', function(e) {
+            const chip = e.target.closest('.chip');
+            if (chip) {
+                chip.classList.toggle('selected');
+                const value = chip.dataset.value;
+                if (chip.classList.contains('selected')) {
+                    if (!userSelections.languages.includes(value)) {
+                        userSelections.languages.push(value);
+                    }
+                } else {
+                    userSelections.languages = userSelections.languages.filter(l => l !== value);
+                }
+            }
+        });
+        document.getElementById('era-options').addEventListener('click', function(e) {
+            const chip = e.target.closest('.chip');
+            if (!chip) return;
+
+            chip.classList.toggle('selected');
+            const value = chip.dataset.value;
+
+            // extra safety
+            if (!Array.isArray(userSelections.eras)) {
+                userSelections.eras = [];
+            }
+
+            if (chip.classList.contains('selected')) {
+                if (!userSelections.eras.includes(value)) {
+                    userSelections.eras.push(value);
+                }
+            } else {
+                userSelections.eras = userSelections.eras.filter(v => v !== value);
+            }
+        });
+    </script>
+</body>
+</html>
