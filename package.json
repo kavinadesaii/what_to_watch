@@ -5,11 +5,12 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node setup-database.js && node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.0",
-    "pg": "^8.11.0"
+    "pg": "^8.11.0",
+    "node-fetch": "^3.3.0"
   }
 }
