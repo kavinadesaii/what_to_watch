@@ -1,5 +1,5 @@
 import pg from 'pg';
-import { google } from 'googleapis';
+import fetch from 'node-fetch';
 
 const { Pool } = pg;
 
@@ -7,56 +7,23 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
 
-let connectionSettings;
-
-async function getAccessToken() {
-  if (connectionSettings && connectionSettings.settings.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
-    return connectionSettings.settings.access_token;
-  }
-  
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
-
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found');
-  }
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=google-sheet',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  const accessToken = connectionSettings?.settings?.access_token || connectionSettings.settings?.oauth?.credentials?.access_token;
-
-  if (!connectionSettings || !accessToken) {
-    throw new Error('Google Sheet not connected');
-  }
-  return accessToken;
-}
-
-async function getUncachableGoogleSheetClient() {
-  const accessToken = await getAccessToken();
-  const oauth2Client = new google.auth.OAuth2();
-  oauth2Client.setCredentials({ access_token: accessToken });
-  return google.sheets({ version: 'v4', auth: oauth2Client });
-}
-
 async function readSheetData(spreadsheetId, range) {
-  const sheets = await getUncachableGoogleSheetClient();
-  const response = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range,
-  });
-  return response.data.values;
+  // Read from public Google Sheet (no auth needed)
+  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${range}`;
+  
+  const response = await fetch(url);
+  const text = await response.text();
+  
+  // Parse Google's JSONP response
+  const jsonText = text.substring(47).slice(0, -2);
+  const data = JSON.parse(jsonText);
+  
+  // Convert to array format
+  const rows = data.table.rows.map(row => 
+    row.c.map(cell => cell?.v || '')
+  );
+  
+  return rows;
 }
 
 async function setupDatabase() {
@@ -81,8 +48,8 @@ async function setupDatabase() {
         platform VARCHAR(200),
         time_category VARCHAR(100),
         poster_url TEXT,
-        year INTEGER,              -- 👈 NEW
-        mood_tags TEXT,            -- stays
+        year INTEGER,
+        mood_tags TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
@@ -100,12 +67,12 @@ async function setupDatabase() {
       return;
     }
     
-    const headers = data[0];
     console.log(`Found ${data.length - 1} movies to import`);
     
     let imported = 0;
     let errors = 0;
     
+    // Skip header row (index 0)
     for (let i = 1; i < data.length; i++) {
       const row = data[i];
       
@@ -126,19 +93,23 @@ async function setupDatabase() {
           )
           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         `, [
-          row[0] || '',              // Name
-          row[1] || '',              // Type
-          row[2] || '',              // Summary
-          row[3] || '',              // Language
-          row[4] || '',              // Genre
-          row[5] || '',              // Family Safe?
-          row[6] || '',              // Platform
-          row[7] || '',              // Time Category
-          row[8] || '',              // Poster URL
-          row[9] ? parseInt(row[9], 10) || null : null,  // Year (number or null)
-          row[10] || ''              // Mood Tags
+          row[0] || '',
+          row[1] || '',
+          row[2] || '',
+          row[3] || '',
+          row[4] || '',
+          row[5] || '',
+          row[6] || '',
+          row[7] || '',
+          row[8] || '',
+          row[9] ? parseInt(row[9], 10) || null : null,
+          row[10] || ''
         ]);
         imported++;
+        
+        if (imported % 10 === 0) {
+          console.log(`Imported ${imported} movies...`);
+        }
       } catch (err) {
         console.error(`Error importing row ${i}: ${err.message}`);
         errors++;
@@ -152,10 +123,10 @@ async function setupDatabase() {
     const countResult = await client.query('SELECT COUNT(*) FROM movies');
     console.log(`\nTotal movies in database: ${countResult.rows[0].count}`);
     
-    const sampleResult = await client.query('SELECT name, type, time_category, mood_tags FROM movies LIMIT 3');
+    const sampleResult = await client.query('SELECT name, type, genre, year FROM movies LIMIT 5');
     console.log('\nSample data:');
     sampleResult.rows.forEach(row => {
-      console.log(`  - ${row.name} (${row.type}) - ${row.time_category}`);
+      console.log(`  - ${row.name} (${row.type}, ${row.year}) - ${row.genre}`);
     });
     
   } finally {
